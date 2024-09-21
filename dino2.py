@@ -33,6 +33,10 @@ ground_surface = pygame.image.load(r'C:\Users\Satyender B\OneDrive\Desktop\proje
 #   score = font.render('My Game', False, (64,64,64))#rgb
 #   score_rect = score.get_rect(center = (500,40))
 
+# obstacles
+obstacle_rect_list= []
+
+
 #for black and white stuff apparently?
 figure = pygame.image.load(r'C:\Users\Satyender B\OneDrive\Desktop\project\totoro_drawing-removebg-preview (1).png').convert_alpha()
 figure_rect = figure.get_rect(midbottom = (80,364))
@@ -58,6 +62,9 @@ bush_rect = bush.get_rect(bottomright = (800,333))
 
 #test_surface = pygame.Surface((600,100))
 #test_surface.fill('Red')
+#timer
+obstacle_timer= pygame.USEREVENT + 1
+pygame.time.set_timer(obstacle_timer,900)
 
 while True:
    for event in pygame.event.get():#gets events happening
@@ -78,7 +85,11 @@ while True:
          if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
             game_active = True
             bush_rect.left = 800
-            start_time = int(pygame.time.get_ticks() / 1000)     
+            start_time = int(pygame.time.get_ticks() / 1000)  
+      if event.type == obstacle_timer and game_active:
+         obstacle_rect_list.append()
+
+   
 
 
    if game_active:
