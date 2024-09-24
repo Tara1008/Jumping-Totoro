@@ -1,5 +1,6 @@
 import pygame
 from sys import exit
+import random from randit
 
 def display_score():
    current_time = int(pygame.time.get_ticks() / 1000) - start_time #dividing by 1000 to get numbers in 1 2 3
@@ -7,6 +8,16 @@ def display_score():
    score_rect = score_surf.get_rect(center= (475,50))
    screen.blit(score_surf,score_rect)
    return current_time
+
+def obstacle_movement(obstacle_list):
+   if obstacle_list:
+      for obstacle_rect in obstacle_list:
+         obstacle_rect.x-= 5
+         screen.blit(bush,obstacle_rect)
+      obstacle_list= [o]
+      return obstacle_list
+   else: return []
+
 
 pygame.init()
 screen = pygame.display.set_mode((1000,400))
@@ -64,7 +75,7 @@ bush_rect = bush.get_rect(bottomright = (800,333))
 #test_surface.fill('Red')
 #timer
 obstacle_timer= pygame.USEREVENT + 1
-pygame.time.set_timer(obstacle_timer,900)
+pygame.time.set_timer(obstacle_timer,1500)
 
 while True:
    for event in pygame.event.get():#gets events happening
@@ -87,7 +98,7 @@ while True:
             bush_rect.left = 800
             start_time = int(pygame.time.get_ticks() / 1000)  
       if event.type == obstacle_timer and game_active:
-         obstacle_rect_list.append()
+         obstacle_rect_list.append(bush.get_rect(bottomright = (randint(1100,1300),333)))
 
    
 
@@ -111,6 +122,9 @@ while True:
       if figure_rect.bottom >= 365:
          figure_rect.bottom = 365
       screen.blit(figure,figure_rect)
+
+      #obstacle movement
+      obstacle_movement(obstacle_rect_list)
 
       if bush_rect.colliderect(figure_rect) and figure_rect.bottom == 365:
          game_active = False
