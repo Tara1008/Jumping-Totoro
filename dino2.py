@@ -14,7 +14,7 @@ def obstacle_movement(obstacle_list):
       for obstacle_rect in obstacle_list:
          obstacle_rect.x-= 5
          screen.blit(bush,obstacle_rect)
-      obstacle_list= [o]
+      obstacle_list= [obstacle for obstacle in obstacle_list if obstacle.x>-100]
       return obstacle_list
    else: return []
 
