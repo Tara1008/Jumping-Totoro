@@ -20,10 +20,10 @@ def obstacle_movement(obstacle_list):
       return obstacle_list
    else: return []
 
-def collisions(player,obstacles)
+def collisions(figure,obstacles)
 if obstacles:
    for obstacle_rect in obstacles:
-      if player.colliderect(obstacle_rect):
+      if figure.colliderect(obstacle_rect):
          return False
       return True
       
@@ -138,16 +138,15 @@ while True:
       #obstacle movement
       obstacle_movement(obstacle_rect_list)
 
-      game_active=vcollisions(player_rect,obstacle_rect_list)
-
-      if bush_rect.colliderect(figure_rect) and figure_rect.bottom == 365:
-         game_active = False
+      game_active=collisions(figure_rect,obstacle_rect_list)
 
 
    else:
       screen.fill((144,163,161)) #(12,38,27) optional
       screen.blit(figure_stand,figure_stand_rect)
       obstacle_rect_list.clear()
+      figure_rect.midbottom =(80,300)
+      figure_gravity= 0   
 
       score_message = font.render(f'Your Score: {score}',False,(80,75,90))
       score_message_rect = score_message.get_rect(center = (480,355))
