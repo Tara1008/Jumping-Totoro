@@ -13,10 +13,20 @@ def obstacle_movement(obstacle_list):
    if obstacle_list:
       for obstacle_rect in obstacle_list:
          obstacle_rect.x-= 5
+         if obstacle_rect.bottom == 300:
+            screen.blit(bush,obstacle_rect)
          screen.blit(bush,obstacle_rect)
       obstacle_list= [obstacle for obstacle in obstacle_list if obstacle.x>-100]
       return obstacle_list
    else: return []
+
+def collisions(player,obstacles)
+if obstacles:
+   for obstacle_rect in obstacles:
+      if player.colliderect(obstacle_rect):
+         return False
+      return True
+      
 
 
 pygame.init()
@@ -46,6 +56,8 @@ ground_surface = pygame.image.load(r'C:\Users\Satyender B\OneDrive\Desktop\proje
 
 # obstacles
 obstacle_rect_list= []
+
+
 
 
 #for black and white stuff apparently?
@@ -126,6 +138,8 @@ while True:
       #obstacle movement
       obstacle_movement(obstacle_rect_list)
 
+      game_active=vcollisions(player_rect,obstacle_rect_list)
+
       if bush_rect.colliderect(figure_rect) and figure_rect.bottom == 365:
          game_active = False
 
@@ -133,6 +147,7 @@ while True:
    else:
       screen.fill((144,163,161)) #(12,38,27) optional
       screen.blit(figure_stand,figure_stand_rect)
+      obstacle_rect_list.clear()
 
       score_message = font.render(f'Your Score: {score}',False,(80,75,90))
       score_message_rect = score_message.get_rect(center = (480,355))
