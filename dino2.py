@@ -1,6 +1,6 @@
 import pygame
 from sys import exit
-import random from randit
+from random import randint
 
 def display_score():
    current_time = int(pygame.time.get_ticks() / 1000) - start_time #dividing by 1000 to get numbers in 1 2 3
@@ -20,11 +20,11 @@ def obstacle_movement(obstacle_list):
       return obstacle_list
    else: return []
 
-def collisions(figure,obstacles)
-if obstacles:
-   for obstacle_rect in obstacles:
-      if figure.colliderect(obstacle_rect):
-         return False
+def collisions(figure,obstacles):
+   if obstacles:
+      for obstacle_rect in obstacles:
+         if figure.colliderect(obstacle_rect):
+            return False
       return True
       
 
