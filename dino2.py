@@ -9,24 +9,35 @@ def display_score():
    screen.blit(score_surf,score_rect)
    return current_time
 
-def obstacle_movement(obstacle_list):
-   if obstacle_list:
-      for obstacle_rect in obstacle_list:
-         obstacle_rect.x-= 5
-         if obstacle_rect.bottom == 300:
-            screen.blit(bush,obstacle_rect)
-         screen.blit(bush,obstacle_rect)
-      obstacle_list= [obstacle for obstacle in obstacle_list if obstacle.x>-100]
-      return obstacle_list
-   else: return []
+def obstacle_movement(bush_list):
+   if bush_list:
+      for bush_rect in bush_list:
+         bush_rect.x -= 5       #########
 
-def collisions(figure,obstacles):
-   if obstacles:
-      for obstacle_rect in obstacles:
-         if figure.colliderect(obstacle_rect):
+         screen.blit(bush,bush_rect)
+      bush_list = [obstacle for obstacle in bush_list if obstacle.x > -100]
+      return bush_list
+   else:
+      return []
+
+def collisions(figure,obsticles):
+   if obsticles:
+      for bush_rect in obsticles:
+         if figure.colliderect(bush_rect):
             return False
-      return True
-      
+   return True                            
+
+def figure_animation():
+   global figure,figure_index
+
+   if figure_rect.bottom < 300:
+      figure = figure_jump
+   else:
+      figure_index += 0.1 #small increments to change walk
+      if figure_index >= len(figure_walk):
+         figure_index = 0
+      figure = figure_walk[int(figure_index)]
+
 
 
 pygame.init()
@@ -39,7 +50,7 @@ screen.fill(color)
 #the input is a tuple, and this will work for only 1 sec
 #this is a display surface that shows up for a sec and then the code terminates
 #a way to keep the code to keep running is to use a while loop
-pygame.display.set_caption('jumpjump')
+pygame.display.set_caption('totoro jump')
 clock = pygame.time.Clock() #clock object
 font = pygame.font.Font('RobotoMono.ttf',30) #need to add font style here
 game_active = False #change it to true later 
@@ -47,26 +58,37 @@ start_time = 0
 score = 0
 
 
-sky_surface = pygame.image.load(r'C:\Users\Satyender B\OneDrive\Desktop\project\disneyback.png').convert()
-ground_surface = pygame.image.load(r'C:\Users\Satyender B\OneDrive\Desktop\project\groundf.jpg').convert()
+sky_surface = pygame.image.load(r'C:\Users\Satyender B\OneDrive\Desktop\project\images\disneyback.png').convert()
+ground_surface = pygame.image.load(r'C:\Users\Satyender B\OneDrive\Desktop\project\images\ground.jpg').convert()
 #convert converts the image to a format pygame can easily work with -> making it faster
 
 #   score = font.render('My Game', False, (64,64,64))#rgb
 #   score_rect = score.get_rect(center = (500,40))
 
-# obstacles
-obstacle_rect_list= []
+bush1 = pygame.image.load(r'C:\Users\Satyender B\OneDrive\Desktop\project\images\soot1.png').convert_alpha()
+bush2 = pygame.image.load(r'C:\Users\Satyender B\OneDrive\Desktop\project\images\soot2.png').convert_alpha()
+bush_frames = [bush1, bush2]
+bush_frame_index = 0
+bush = bush_frames[bush_frame_index]
 
+#bush_rect = bush.get_rect(bottomright = (800,333))
 
+bush_rect_list = []
 
 
 #for black and white stuff apparently?
-figure = pygame.image.load(r'C:\Users\Satyender B\OneDrive\Desktop\project\totoro_drawing-removebg-preview (1).png').convert_alpha()
+figure_walk_1 = pygame.image.load(r'C:\Users\Satyender B\OneDrive\Desktop\project\images\totoro left.png').convert_alpha()
+figure_walk_2 = pygame.image.load(r'C:\Users\Satyender B\OneDrive\Desktop\project\images\totoro walk.png').convert_alpha()
+figure_walk = [figure_walk_1,figure_walk_2]
+figure_index = 0 #to pick walk surface
+figure_jump = pygame.image.load(r'C:\Users\Satyender B\OneDrive\Desktop\project\images\totoro right.png').convert_alpha()
+
+figure = figure_walk[figure_index]
 figure_rect = figure.get_rect(midbottom = (80,364))
 figure_gravity = 0
 
 #game intro
-figure_stand = pygame.image.load(r'C:\Users\Satyender B\OneDrive\Desktop\project\standing_totoro-removebg-preview.png').convert_alpha()
+figure_stand = pygame.image.load(r'C:\Users\Satyender B\OneDrive\Desktop\project\images\standing_totoro.png').convert_alpha()
 figure_stand_rect = figure_stand.get_rect(center = (475,200))
 
 
@@ -77,17 +99,17 @@ game_name_rect = game_name.get_rect(center = (485,50))
 game_message = font.render('Press space to run',False,(80,75,90))
 game_message_rect = game_message.get_rect(center = (485,350))
 
+bush_timer = pygame.USEREVENT + 1
+pygame.time.set_timer(bush_timer,2500)       ########
+
+bush_animation_timer = pygame.USEREVENT + 2
+pygame.time.set_timer(bush_animation_timer,500)
 
 
-bush = pygame.image.load(r'C:\Users\Satyender B\OneDrive\Desktop\project\soot2-removebg-preview.png').convert_alpha() 
-bush_rect = bush.get_rect(bottomright = (800,333))
 
 
 #test_surface = pygame.Surface((600,100))
 #test_surface.fill('Red')
-#timer
-obstacle_timer= pygame.USEREVENT + 1
-pygame.time.set_timer(obstacle_timer,1500)
 
 while True:
    for event in pygame.event.get():#gets events happening
@@ -99,20 +121,28 @@ while True:
       if game_active:
          if event.type == pygame.MOUSEBUTTONDOWN:
             if figure_rect.collidepoint(event.pos) and figure_rect.bottom >= 365: 
-               figure_gravity = -20
+               figure_gravity = -25
             
          if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE and figure_rect.bottom >= 365:
-               figure_gravity = -25    #########
+               figure_gravity = -30    #########
       else:
          if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
             game_active = True
-            bush_rect.left = 800
-            start_time = int(pygame.time.get_ticks() / 1000)  
-      if event.type == obstacle_timer and game_active:
-         obstacle_rect_list.append(bush.get_rect(bottomright = (randint(1100,1300),333)))
+            start_time = int(pygame.time.get_ticks() / 1000)
+            bush_rect_list.clear()
 
-   
+      if game_active: 
+         if event.type == bush_timer:
+            bush_rect_list.append(bush.get_rect(bottomright = (randint(950,1400),355))) #used to control distance between obstacles 
+         
+         if event.type == bush_animation_timer:
+            if bush_frame_index == 0:
+               bush_frame_index = 1
+            else:
+               bush_frame_index = 0   
+            bush = bush_frames[bush_frame_index]
+
 
 
    if game_active:
@@ -122,31 +152,46 @@ while True:
       #screen.blit(score,score_rect)  
       score = display_score()
 
-      bush_rect.left -= 5 ########
-      if (bush_rect.left <- 100): 
-         bush_rect.left = 800
-      figure_rect.left += 3 ##########
-      screen.blit(bush, bush_rect)
+      #bush_rect.left -= 5 ########
+      #if (bush_rect.left <- 100): 
+      #   bush_rect.left = 800
+      #figure_rect.left += 2 ##########
+      #screen.blit(bush, bush_rect)
+      # Debug: Draw the rectangles to check collision areas
+      pygame.draw.rect(screen, (255, 0, 0), figure_rect, 2)  # Red box around figure
+      for bush_rect in bush_rect_list:
+         pygame.draw.rect(screen, (0, 255, 0), bush_rect, 2)  # Green box around bushes
 
-      #figure
-      figure_gravity += 1
-      figure_rect.y += figure_gravity
-      if figure_rect.bottom >= 365:
-         figure_rect.bottom = 365
-      screen.blit(figure,figure_rect)
 
-      #obstacle movement
-      obstacle_movement(obstacle_rect_list)
+      gravity_increment = 1  # How fast the character falls
+      jump_strength = -25    # How strong the jump is
 
-      game_active=collisions(figure_rect,obstacle_rect_list)
+      # Update the figure's position
+      if game_active:
+         figure_gravity += gravity_increment
+         figure_rect.y += figure_gravity
+
+         # Prevent the character from falling below the ground
+         if figure_rect.bottom >= 365:
+            figure_rect.bottom = 365  # Set the bottom to ground level
+            figure_gravity = 0
+            
+         figure_animation()   
+         screen.blit(figure,figure_rect)
+
+      bush_rect_list = obstacle_movement(bush_rect_list)
+      game_active = collisions(figure_rect,bush_rect_list)
+
+      #if bush_rect.colliderect(figure_rect) and figure_rect.bottom == 365:
+      #   game_active = False
 
 
    else:
       screen.fill((144,163,161)) #(12,38,27) optional
       screen.blit(figure_stand,figure_stand_rect)
-      obstacle_rect_list.clear()
-      figure_rect.midbottom =(80,300)
-      figure_gravity= 0   
+      bush_rect_list.clear()
+      figure_rect.midbottom = (80,364)
+      figure_gravity = 0
 
       score_message = font.render(f'Your Score: {score}',False,(80,75,90))
       score_message_rect = score_message.get_rect(center = (480,355))
@@ -162,6 +207,7 @@ while True:
    #keys = pygame.key.get_pressed() #like a dictonary
    #if keys[pygame.K_SPACE]:
       #print('jump')
+
 
 
 
