@@ -45,6 +45,9 @@ screen = pygame.display.set_mode((1000,400))
 color = (173,216,230)
 screen.fill(color)
 
+jump_sound = pygame.mixer.Sound(r'C:\Users\Satyender B\OneDrive\Desktop\project\jump_sound.mp3')
+jump_sound.set_volume(1.0)
+
 
 
 #the input is a tuple, and this will work for only 1 sec
@@ -126,6 +129,7 @@ while True:
          if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE and figure_rect.bottom >= 365:
                figure_gravity = -30    #########
+               jump_sound.play()
       else:
          if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
             game_active = True
