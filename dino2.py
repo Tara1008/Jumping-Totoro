@@ -45,7 +45,7 @@ screen = pygame.display.set_mode((1000,400))
 color = (173,216,230)
 screen.fill(color)
 
-jump_sound = pygame.mixer.Sound(r'C:\Users\Satyender B\OneDrive\Desktop\project\jump_sound.mp3')
+jump_sound = pygame.mixer.Sound(r'enter path')
 jump_sound.set_volume(1.0)
 
 
@@ -61,15 +61,15 @@ start_time = 0
 score = 0
 
 
-sky_surface = pygame.image.load(r'C:\Users\Satyender B\OneDrive\Desktop\project\images\disneyback.png').convert()
-ground_surface = pygame.image.load(r'C:\Users\Satyender B\OneDrive\Desktop\project\images\ground.jpg').convert()
+sky_surface = pygame.image.load(r'enter path').convert()
+ground_surface = pygame.image.load(r'enter path').convert()
 #convert converts the image to a format pygame can easily work with -> making it faster
 
 #   score = font.render('My Game', False, (64,64,64))#rgb
 #   score_rect = score.get_rect(center = (500,40))
 
-bush1 = pygame.image.load(r'C:\Users\Satyender B\OneDrive\Desktop\project\images\soot1.png').convert_alpha()
-bush2 = pygame.image.load(r'C:\Users\Satyender B\OneDrive\Desktop\project\images\soot2.png').convert_alpha()
+bush1 = pygame.image.load(r'enter path').convert_alpha()
+bush2 = pygame.image.load(r'enter path').convert_alpha()
 bush_frames = [bush1, bush2]
 bush_frame_index = 0
 bush = bush_frames[bush_frame_index]
@@ -80,18 +80,18 @@ bush_rect_list = []
 
 
 #for black and white stuff apparently?
-figure_walk_1 = pygame.image.load(r'C:\Users\Satyender B\OneDrive\Desktop\project\images\totoro left.png').convert_alpha()
-figure_walk_2 = pygame.image.load(r'C:\Users\Satyender B\OneDrive\Desktop\project\images\totoro walk.png').convert_alpha()
+figure_walk_1 = pygame.image.load(r'enter path').convert_alpha()
+figure_walk_2 = pygame.image.load(r'enter path').convert_alpha()
 figure_walk = [figure_walk_1,figure_walk_2]
 figure_index = 0 #to pick walk surface
-figure_jump = pygame.image.load(r'C:\Users\Satyender B\OneDrive\Desktop\project\images\totoro right.png').convert_alpha()
+figure_jump = pygame.image.load(r'enter path').convert_alpha()
 
 figure = figure_walk[figure_index]
 figure_rect = figure.get_rect(midbottom = (80,364))
 figure_gravity = 0
 
 #game intro
-figure_stand = pygame.image.load(r'C:\Users\Satyender B\OneDrive\Desktop\project\images\standing_totoro.png').convert_alpha()
+figure_stand = pygame.image.load(r'enter path').convert_alpha()
 figure_stand_rect = figure_stand.get_rect(center = (475,200))
 
 
