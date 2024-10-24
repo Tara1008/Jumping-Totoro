@@ -158,9 +158,9 @@ while True:
       #figure_rect.left += 2 ##########
       #screen.blit(bush, bush_rect)
       # Debug: Draw the rectangles to check collision areas
-      pygame.draw.rect(screen, (255, 0, 0), figure_rect, 2)  # Red box around figure
-      for bush_rect in bush_rect_list:
-         pygame.draw.rect(screen, (0, 255, 0), bush_rect, 2)  # Green box around bushes
+      #pygame.draw.rect(screen, (255, 0, 0), figure_rect, 2)  # Red box around figure
+      #for bush_rect in bush_rect_list:
+      #   pygame.draw.rect(screen, (0, 255, 0), bush_rect, 2)  # Green box around bushes
 
 
       gravity_increment = 1  # How fast the character falls
