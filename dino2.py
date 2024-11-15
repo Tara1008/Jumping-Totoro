@@ -2,6 +2,9 @@ import pygame
 from sys import exit
 from random import randint
 
+score = 0
+high_score = 0
+
 def display_score():
    current_time = int(pygame.time.get_ticks() / 1000) - start_time #dividing by 1000 to get numbers in 1 2 3
    score_surf = font.render(f'{current_time}',False,(1,50,25))#we have to put it in f string becuase it doest accept integers
@@ -38,38 +41,48 @@ def figure_animation():
          figure_index = 0
       figure = figure_walk[int(figure_index)]
 
-
+def reset_game():
+    global game_active, start_time, score, high_score
+    # Update high score if current score is greater
+    if score > high_score:
+        high_score = score
+    score = 0
+    game_active = False
 
 pygame.init()
 screen = pygame.display.set_mode((1000,400))
 color = (173,216,230)
 screen.fill(color)
 
-jump_sound = pygame.mixer.Sound(r'enter path')
+jump_sound = pygame.mixer.Sound(r'C:\Users\Satyender B\OneDrive\Desktop\project\jump_sound.mp3')
 jump_sound.set_volume(1.0)
+
+pygame.mixer.music.load(r'C:\Users\Satyender B\OneDrive\Desktop\project\totoro_audio.mp3')
+pygame.mixer.music.set_volume(1.0)  # Adjust volume as needed
+pygame.mixer.music.play(-1)
 
 
 
 #the input is a tuple, and this will work for only 1 sec
 #this is a display surface that shows up for a sec and then the code terminates
 #a way to keep the code to keep running is to use a while loop
-pygame.display.set_caption('totoro jump')
+pygame.display.set_caption('Totoro jump')
 clock = pygame.time.Clock() #clock object
 font = pygame.font.Font('RobotoMono.ttf',30) #need to add font style here
 game_active = False #change it to true later 
 start_time = 0
-score = 0
 
 
-sky_surface = pygame.image.load(r'enter path').convert()
-ground_surface = pygame.image.load(r'enter path').convert()
+
+sky_surface = pygame.image.load(r'C:\Users\Satyender B\OneDrive\Desktop\project\images\disneyback.png').convert()
+ground_surface = pygame.image.load(r'C:\Users\Satyender B\OneDrive\Desktop\project\images\ground1.jpg').convert()
 #convert converts the image to a format pygame can easily work with -> making it faster
 
 #   score = font.render('My Game', False, (64,64,64))#rgb
 #   score_rect = score.get_rect(center = (500,40))
 
-bush1 = pygame.image.load(r'enter path').convert_alpha()
-bush2 = pygame.image.load(r'enter path').convert_alpha()
+bush1 = pygame.image.load(r'C:\Users\Satyender B\OneDrive\Desktop\project\images\soot1.png').convert_alpha()
+bush2 = pygame.image.load(r'C:\Users\Satyender B\OneDrive\Desktop\project\images\soot2.png').convert_alpha()
 bush_frames = [bush1, bush2]
 bush_frame_index = 0
 bush = bush_frames[bush_frame_index]
@@ -80,18 +93,18 @@ bush_rect_list = []
 
 
 #for black and white stuff apparently?
-figure_walk_1 = pygame.image.load(r'enter path').convert_alpha()
-figure_walk_2 = pygame.image.load(r'enter path').convert_alpha()
+figure_walk_1 = pygame.image.load(r'C:\Users\Satyender B\OneDrive\Desktop\project\images\totoro left.png').convert_alpha()
+figure_walk_2 = pygame.image.load(r'C:\Users\Satyender B\OneDrive\Desktop\project\images\totoro walk.png').convert_alpha()
 figure_walk = [figure_walk_1,figure_walk_2]
 figure_index = 0 #to pick walk surface
-figure_jump = pygame.image.load(r'enter path').convert_alpha()
+figure_jump = pygame.image.load(r'C:\Users\Satyender B\OneDrive\Desktop\project\images\totoro right.png').convert_alpha()
 
 figure = figure_walk[figure_index]
 figure_rect = figure.get_rect(midbottom = (80,364))
 figure_gravity = 0
 
 #game intro
-figure_stand = pygame.image.load(r'enter path').convert_alpha()
+figure_stand = pygame.image.load(r'C:\Users\Satyender B\OneDrive\Desktop\project\images\standing_totoro.png').convert_alpha()
 figure_stand_rect = figure_stand.get_rect(center = (475,200))
 
 
@@ -141,17 +154,18 @@ while True:
             bush_rect_list.append(bush.get_rect(bottomright = (randint(950,1400),355))) #used to control distance between obstacles 
          
          if event.type == bush_animation_timer:
-            if bush_frame_index == 0:
+            bush_frame_index = (bush_frame_index + 1) % len(bush_frames)
+            '''if bush_frame_index == 0:
                bush_frame_index = 1
             else:
-               bush_frame_index = 0   
+               bush_frame_index = 0''' 
             bush = bush_frames[bush_frame_index]
 
 
 
    if game_active:
       screen.blit(sky_surface,(0,0))
-      screen.blit(ground_surface,(0,330))#blit = block image transfer
+      screen.blit(ground_surface,(0,340))#blit = block image transfer
       #pygame.draw.rect(screen,(24,64,26),score_rect,10)
       #screen.blit(score,score_rect)  
       score = display_score()
@@ -191,6 +205,9 @@ while True:
 
 
    else:
+      if score > high_score:
+        high_score = score
+        
       screen.fill((144,163,161)) #(12,38,27) optional
       screen.blit(figure_stand,figure_stand_rect)
       bush_rect_list.clear()
@@ -198,13 +215,18 @@ while True:
       figure_gravity = 0
 
       score_message = font.render(f'Your Score: {score}',False,(80,75,90))
-      score_message_rect = score_message.get_rect(center = (480,355))
+      score_message_rect = score_message.get_rect(center = (480,320))
+      high_score_message = font.render(f'High Score: {high_score}', False, (80, 75, 90))
+      high_score_message_rect = high_score_message.get_rect(center=(480, 350))
       screen.blit(game_name, game_name_rect)
+      
 
       if score == 0:
          screen.blit(game_message,game_message_rect)
       else:
-         screen.blit(score_message, score_message_rect)   
+         screen.blit(score_message, score_message_rect)
+         screen.blit(high_score_message, high_score_message_rect)
+
 
 
 
