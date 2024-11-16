@@ -12,21 +12,21 @@ def display_score():
    screen.blit(score_surf,score_rect)
    return current_time
 
-def obstacle_movement(bush_list):
-   if bush_list:
-      for bush_rect in bush_list:
-         bush_rect.x -= 5       #########
+def obstacle_movement(obstacle_list):
+   if obstacle_list:
+      for obstacle_rect in obstacle_list:
+         obstacle_rect.x -= 5       #########
 
-         screen.blit(bush,bush_rect)
-      bush_list = [obstacle for obstacle in bush_list if obstacle.x > -100]
-      return bush_list
+         screen.blit(obstacle,obstacle_rect)
+      obstacle_list = [obstacle for obstacle in obstacle_list if obstacle.x > -100]
+      return obstacle_list
    else:
       return []
 
-def collisions(figure,obsticles):
-   if obsticles:
-      for bush_rect in obsticles:
-         if figure.colliderect(bush_rect):
+def collisions(figure,obstacles):
+   if obstacles:
+      for obstacle_rect in obstacles:
+         if figure.colliderect(obstacle_rect):
             return False
    return True                            
 
@@ -54,11 +54,11 @@ screen = pygame.display.set_mode((1000,400))
 color = (173,216,230)
 screen.fill(color)
 
-jump_sound = pygame.mixer.Sound(r'C:\Users\Satyender B\OneDrive\Desktop\project\jump_sound.mp3')
+jump_sound = pygame.mixer.Sound(r'add audio path')
 jump_sound.set_volume(1.0)
 
-pygame.mixer.music.load(r'C:\Users\Satyender B\OneDrive\Desktop\project\totoro_audio.mp3')
-pygame.mixer.music.set_volume(1.0)  # Adjust volume as needed
+pygame.mixer.music.load(r'add audio path')
+pygame.mixer.music.set_volume(1.0) 
 pygame.mixer.music.play(-1)
 
 
@@ -74,37 +74,37 @@ start_time = 0
 
 
 
-sky_surface = pygame.image.load(r'C:\Users\Satyender B\OneDrive\Desktop\project\images\disneyback.png').convert()
-ground_surface = pygame.image.load(r'C:\Users\Satyender B\OneDrive\Desktop\project\images\ground1.jpg').convert()
+bg_surface = pygame.image.load(r'add image path').convert()
+ground_surface = pygame.image.load(r'add image path').convert()
 #convert converts the image to a format pygame can easily work with -> making it faster
 
 #   score = font.render('My Game', False, (64,64,64))#rgb
 #   score_rect = score.get_rect(center = (500,40))
 
-bush1 = pygame.image.load(r'C:\Users\Satyender B\OneDrive\Desktop\project\images\soot1.png').convert_alpha()
-bush2 = pygame.image.load(r'C:\Users\Satyender B\OneDrive\Desktop\project\images\soot2.png').convert_alpha()
-bush_frames = [bush1, bush2]
-bush_frame_index = 0
-bush = bush_frames[bush_frame_index]
+obstacle1 = pygame.image.load(r'add image path').convert_alpha()
+obstacle2 = pygame.image.load(r'add image path').convert_alpha()
+obstacle_frames = [obstacle1, obstacle2]
+obstacle_frame_index = 0
+obstacle = obstacle_frames[obstacle_frame_index]
 
-#bush_rect = bush.get_rect(bottomright = (800,333))
+#obstacle_rect = obstacle.get_rect(bottomright = (800,333))
 
-bush_rect_list = []
+obstacle_rect_list = []
 
 
 #for black and white stuff apparently?
-figure_walk_1 = pygame.image.load(r'C:\Users\Satyender B\OneDrive\Desktop\project\images\totoro left.png').convert_alpha()
-figure_walk_2 = pygame.image.load(r'C:\Users\Satyender B\OneDrive\Desktop\project\images\totoro walk.png').convert_alpha()
+figure_walk_1 = pygame.image.load(r'add image path').convert_alpha()
+figure_walk_2 = pygame.image.load(r'add image path').convert_alpha()
 figure_walk = [figure_walk_1,figure_walk_2]
 figure_index = 0 #to pick walk surface
-figure_jump = pygame.image.load(r'C:\Users\Satyender B\OneDrive\Desktop\project\images\totoro right.png').convert_alpha()
+figure_jump = pygame.image.load(r'add image path').convert_alpha()
 
 figure = figure_walk[figure_index]
 figure_rect = figure.get_rect(midbottom = (80,364))
 figure_gravity = 0
 
 #game intro
-figure_stand = pygame.image.load(r'C:\Users\Satyender B\OneDrive\Desktop\project\images\standing_totoro.png').convert_alpha()
+figure_stand = pygame.image.load(r'add image path').convert_alpha()
 figure_stand_rect = figure_stand.get_rect(center = (475,200))
 
 
@@ -115,11 +115,11 @@ game_name_rect = game_name.get_rect(center = (485,50))
 game_message = font.render('Press space to run',False,(80,75,90))
 game_message_rect = game_message.get_rect(center = (485,350))
 
-bush_timer = pygame.USEREVENT + 1
-pygame.time.set_timer(bush_timer,2500)       ########
+obstacle_timer = pygame.USEREVENT + 1
+pygame.time.set_timer(obstacle_timer,2500)       ########
 
-bush_animation_timer = pygame.USEREVENT + 2
-pygame.time.set_timer(bush_animation_timer,500)
+obstacle_animation_timer = pygame.USEREVENT + 2
+pygame.time.set_timer(obstacle_animation_timer,500)
 
 
 
@@ -147,38 +147,38 @@ while True:
          if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
             game_active = True
             start_time = int(pygame.time.get_ticks() / 1000)
-            bush_rect_list.clear()
+            obstacle_rect_list.clear()
 
       if game_active: 
-         if event.type == bush_timer:
-            bush_rect_list.append(bush.get_rect(bottomright = (randint(950,1400),355))) #used to control distance between obstacles 
+         if event.type == obstacle_timer:
+            obstacle_rect_list.append(obstacle.get_rect(bottomright = (randint(950,1400),355))) #used to control distance between obstacles 
          
-         if event.type == bush_animation_timer:
-            bush_frame_index = (bush_frame_index + 1) % len(bush_frames)
-            '''if bush_frame_index == 0:
-               bush_frame_index = 1
+         if event.type == obstacle_animation_timer:
+            obstacle_frame_index = (obstacle_frame_index + 1) % len(obstacle_frames)
+            '''if obstacle_frame_index == 0:
+               obstacle_frame_index = 1
             else:
-               bush_frame_index = 0''' 
-            bush = bush_frames[bush_frame_index]
+               obstacle_frame_index = 0''' 
+            obstacle = obstacle_frames[obstacle_frame_index]
 
 
 
    if game_active:
-      screen.blit(sky_surface,(0,0))
+      screen.blit(bg_surface,(0,0))
       screen.blit(ground_surface,(0,340))#blit = block image transfer
       #pygame.draw.rect(screen,(24,64,26),score_rect,10)
       #screen.blit(score,score_rect)  
       score = display_score()
 
-      #bush_rect.left -= 5 ########
-      #if (bush_rect.left <- 100): 
-      #   bush_rect.left = 800
+      #obstacle_rect.left -= 5 ########
+      #if (obstacle_rect.left <- 100): 
+      #   obstacle_rect.left = 800
       #figure_rect.left += 2 ##########
-      #screen.blit(bush, bush_rect)
+      #screen.blit(obstacle, obstacle_rect)
       # Debug: Draw the rectangles to check collision areas
       #pygame.draw.rect(screen, (255, 0, 0), figure_rect, 2)  # Red box around figure
-      #for bush_rect in bush_rect_list:
-      #   pygame.draw.rect(screen, (0, 255, 0), bush_rect, 2)  # Green box around bushes
+      #for obstacle_rect in obstacle_rect_list:
+      #   pygame.draw.rect(screen, (0, 255, 0), obstacle_rect, 2)  # Green box around obstaclees
 
 
       gravity_increment = 1  # How fast the character falls
@@ -197,10 +197,10 @@ while True:
          figure_animation()   
          screen.blit(figure,figure_rect)
 
-      bush_rect_list = obstacle_movement(bush_rect_list)
-      game_active = collisions(figure_rect,bush_rect_list)
+      obstacle_rect_list = obstacle_movement(obstacle_rect_list)
+      game_active = collisions(figure_rect,obstacle_rect_list)
 
-      #if bush_rect.colliderect(figure_rect) and figure_rect.bottom == 365:
+      #if obstacle_rect.colliderect(figure_rect) and figure_rect.bottom == 365:
       #   game_active = False
 
 
@@ -210,7 +210,7 @@ while True:
         
       screen.fill((144,163,161)) #(12,38,27) optional
       screen.blit(figure_stand,figure_stand_rect)
-      bush_rect_list.clear()
+      obstacle_rect_list.clear()
       figure_rect.midbottom = (80,364)
       figure_gravity = 0
 
@@ -237,7 +237,7 @@ while True:
 
 
 
-   #if figure_rect.colliderect(bush_rect):
+   #if figure_rect.colliderect(obstacle_rect):
     #  print('collision')
 
    #mouse = pygame.mouse.get_pos()
