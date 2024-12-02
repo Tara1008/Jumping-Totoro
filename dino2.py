@@ -54,10 +54,10 @@ screen = pygame.display.set_mode((1000,400))
 color = (173,216,230)
 screen.fill(color)
 
-jump_sound = pygame.mixer.Sound(r'add audio path')
+jump_sound = pygame.mixer.Sound(r'add jump audio path')
 jump_sound.set_volume(1.0)
 
-pygame.mixer.music.load(r'add audio path')
+pygame.mixer.music.load(r'add background audio path')
 pygame.mixer.music.set_volume(1.0) 
 pygame.mixer.music.play(-1)
 
@@ -74,8 +74,8 @@ start_time = 0
 
 
 
-bg_surface = pygame.image.load(r'add image path').convert()
-ground_surface = pygame.image.load(r'add image path').convert()
+bg_surface = pygame.image.load(r'add background image path').convert()
+ground_surface = pygame.image.load(r'add ground image path').convert()
 #convert converts the image to a format pygame can easily work with -> making it faster
 
 #   score = font.render('My Game', False, (64,64,64))#rgb
